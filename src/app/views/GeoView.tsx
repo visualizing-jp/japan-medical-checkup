@@ -64,6 +64,7 @@ export function GeoView() {
     "sex",
     "male",
     (v) => sexes.some((s) => s.code === v),
+    { keepDefault: true },
   );
   const [age, setAge] = useUrlState<string>(
     "age",

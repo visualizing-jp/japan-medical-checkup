@@ -1,10 +1,13 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { schedulePageView } from "../analytics.ts";
 
-/** 既定値のときはキーごと落として URL を短く保つ。 */
-function write(key: string, value: string, fallback: string): void {
+/**
+ * 既定値のときはキーごと落として URL を短く保つ。
+ * `keepDefault` のキーは、男のように既定でもクエリへ残す。
+ */
+function write(key: string, value: string, fallback: string, keepDefault: boolean): void {
   const params = new URLSearchParams(window.location.search);
-  if (value === fallback) params.delete(key);
+  if (!keepDefault && value === fallback) params.delete(key);
   else params.set(key, value);
   const query = params.toString();
   window.history.replaceState(
@@ -29,15 +32,17 @@ export function useUrlState<T extends string>(
   key: string,
   fallback: T,
   isValid: (value: string) => boolean,
+  options?: { keepDefault?: boolean },
 ): [T, Dispatch<SetStateAction<T>>] {
+  const keepDefault = options?.keepDefault === true;
   const [value, setValue] = useState<T>(() => {
     const raw = new URLSearchParams(window.location.search).get(key);
     return raw !== null && isValid(raw) ? (raw as T) : fallback;
   });
 
   useEffect(() => {
-    write(key, value, fallback);
-  }, [key, value, fallback]);
+    write(key, value, fallback, keepDefault);
+  }, [key, value, fallback, keepDefault]);
 
   return [value, setValue];
 }

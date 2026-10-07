@@ -29,6 +29,7 @@ export function AgeView() {
     "sex",
     "male",
     (v) => sexes.some((s) => s.code === v),
+    { keepDefault: true },
   );
   const [area, setArea] = useUrlState<string>("area", "13", (v) =>
     choices.some((a) => a.code === v),
