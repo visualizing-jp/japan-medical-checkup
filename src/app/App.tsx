@@ -23,7 +23,7 @@ export function App() {
         <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-end justify-between gap-4 px-6 pt-5">
           <div>
             <h1 className="text-[15px] font-semibold tracking-tight">
-              日本人の健診の数値はどこで違っているか
+              NDB特定健診データから見る、血圧・血糖・BMIなどの地域差
             </h1>
             <p className="text-[11px] text-muted">
               厚生労働省「NDBオープンデータ」第11回・特定健診（2023年度）
