@@ -1,0 +1,40 @@
+{
+  "name": "japan-medical-checkup",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "日本人の健診の数値はどこで違っているか — NDBオープンデータの特定健診から、県と年齢の平均を見る",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "fetch": "bash scripts/fetch-xlsx.sh",
+    "data": "bash scripts/build.sh",
+    "verify": "node scripts/verify.ts",
+    "dev": "vite --host 127.0.0.1 --port 5311 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 5311 --strictPort",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.app.json"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/d3-array": "^3.2.2",
+    "@types/d3-scale": "^4.0.9",
+    "@types/d3-shape": "^3.2.0",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.2",
+    "vite": "^8.2.2"
+  },
+  "dependencies": {
+    "d3-array": "^3.2.4",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  }
+}
