@@ -1,7 +1,7 @@
 /**
  * 都道府県のタイル地図。県の平均 / 全国の平均を升目に書く。
- * 全国 = 1。色尺度は検査項目をまたいで固定する。
- * 特定健診の平均は全国の近くに寄るので、幅は 1/1.06〜1.06。
+ * 全国 = 1 を差ゼロとする。色は線形で、検査項目をまたいで固定する。
+ * 両端は全国から同じ 0.06（0.94 と 1.06）。外は端の色で止まる。
  * 升目の並びは japan-data-disease の TileMap と同じ。
  */
 
@@ -46,9 +46,10 @@ const one = new Intl.NumberFormat("ja-JP", {
   maximumFractionDigits: 2,
 });
 
-const RATIO = 1.06;
+const LOW = 0.94;
+const HIGH = 1.06;
 const color = scaleLinear<string>()
-  .domain([-Math.log(RATIO), 0, Math.log(RATIO)])
+  .domain([LOW, 1, HIGH])
   .range([BELOW, MIDDLE, ABOVE])
   .clamp(true);
 
@@ -112,7 +113,7 @@ export function TileMap({
                   backgroundColor:
                     tile.relative === null
                       ? "var(--color-paper)"
-                      : color(Math.log(tile.relative)),
+                      : color(tile.relative),
                 }}
               >
                 <span className="text-[9.5px] leading-tight text-ink/70">
@@ -135,14 +136,14 @@ function Legend() {
     <div className="text-[10.5px] leading-relaxed text-muted">
       <p className="pb-1.5">全国を1とした平均の比</p>
       <div className="flex items-center gap-2">
-        <span className="tnum">{one.format(1 / RATIO)}</span>
+        <span className="tnum">{one.format(LOW)}</span>
         <span
           className="h-[7px] flex-1 rounded-full border border-rule"
           style={{
             background: `linear-gradient(to right, ${BELOW}, ${MIDDLE}, ${ABOVE})`,
           }}
         />
-        <span className="tnum">{one.format(RATIO)}</span>
+        <span className="tnum">{one.format(HIGH)}</span>
       </div>
       <p className="pt-1 text-faint">尺度は項目をまたいで共通。外れる県は端の色で止まる。</p>
     </div>
