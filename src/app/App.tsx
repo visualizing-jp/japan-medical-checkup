@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { AgeView } from "./views/AgeView.tsx";
+import { EraView } from "./views/EraView.tsx";
 import { GeoView } from "./views/GeoView.tsx";
 import { useUrlState } from "./hooks/useUrlState.ts";
 import { SeriesBar, SeriesFooter } from "./components/Brand.tsx";
@@ -7,6 +8,7 @@ import { SeriesBar, SeriesFooter } from "./components/Brand.tsx";
 const VIEWS = [
   { id: "region", label: "地域", hint: "47都道府県" },
   { id: "age", label: "年齢", hint: "5歳階級" },
+  { id: "era", label: "時代", hint: "2013–2023" },
 ] as const;
 
 type ViewId = (typeof VIEWS)[number]["id"];
@@ -26,7 +28,7 @@ export function App() {
               NDB特定健診データから見る、血圧・血糖・BMIなどの地域差
             </h1>
             <p className="text-[11px] text-muted">
-              厚生労働省「NDBオープンデータ」第11回・特定健診（2023年度）
+              厚生労働省「NDBオープンデータ」特定健診。地域と年齢は2023年度、時代は2013–2023年度
             </p>
           </div>
           <nav className="flex gap-1 -mb-px" aria-label="ビュー">
@@ -53,13 +55,15 @@ export function App() {
       <Suspense key={view} fallback={<Loading />}>
         {view === "region" && <GeoView />}
         {view === "age" && <AgeView />}
+        {view === "era" && <EraView />}
       </Suspense>
 
       <footer className="mx-auto w-full max-w-[1240px] px-6 pt-2 pb-10 text-[11px] leading-relaxed text-faint">
         <ul className="flex flex-col gap-1">
           <li>2023年度に特定健診を受けた40–74歳の平均。住民全員の分布ではない。</li>
           <li>同じ第11回のレセプトは令和6年度で、年が1つ新しい。</li>
-          <li>県の色は全国を1とした比。年齢調整は第1版では出さない。</li>
+          <li>県の色は全国を1とした比。年齢調整は出さない。</li>
+          <li>時代は全国の中計だけ。男と女は足さない。項目の無い年は線を切る。</li>
           <li>
             表の閲覧は
             <a
@@ -72,8 +76,9 @@ export function App() {
           </li>
         </ul>
         <p className="pt-3">
-          出典: 厚生労働省「NDBオープンデータ」第11回・特定健診（2023年度）、
+          出典: 厚生労働省「NDBオープンデータ」特定健診、
           「各項目の平均値　都道府県別性年齢階級別分布」。
+          地域と年齢は第11回（2023年度）。時代は第1回（2013年度、年度末年齢）から第11回までの全国の中計。
           患者調査（受療率）とは母集団が違う。
         </p>
         <SeriesFooter />

@@ -50,3 +50,34 @@ export function loadGeo(): Promise<CheckupData> {
 export function loadAge(): Promise<CheckupData> {
   return chunk("age");
 }
+
+export interface EraData {
+  items: DictEntry[];
+  sexes: DictEntry[];
+  years: DictEntry[];
+  cube: CubeView;
+}
+
+interface EraFile extends CubeJson {
+  items: DictEntry[];
+  sexes: DictEntry[];
+  years: DictEntry[];
+}
+
+export function loadEra(): Promise<EraData> {
+  const hit = cache.get("era");
+  if (hit !== undefined) return hit as Promise<EraData>;
+  const promise = fetch(`${import.meta.env.BASE_URL}data/era.json`)
+    .then((r) => {
+      if (!r.ok) throw new Error(`era.json の取得に失敗しました (${r.status})`);
+      return r.json() as Promise<EraFile>;
+    })
+    .then((raw) => ({
+      items: raw.items,
+      sexes: raw.sexes,
+      years: raw.years,
+      cube: new CubeView(raw),
+    }));
+  cache.set("era", promise);
+  return promise;
+}
