@@ -1,7 +1,7 @@
 /**
  * 都道府県のタイル地図。県の平均 / 全国の平均を升目に書く。
  * 全国 = 1。色尺度は検査項目をまたいで固定する。
- * 特定健診の平均は全国の近くに寄るので、幅は 1/1.15〜1.15。
+ * 特定健診の平均は全国の近くに寄るので、幅は 1/1.06〜1.06。
  * 升目の並びは japan-data-disease の TileMap と同じ。
  */
 
@@ -46,7 +46,7 @@ const one = new Intl.NumberFormat("ja-JP", {
   maximumFractionDigits: 2,
 });
 
-const RATIO = 1.15;
+const RATIO = 1.06;
 const color = scaleLinear<string>()
   .domain([-Math.log(RATIO), 0, Math.log(RATIO)])
   .range([BELOW, MIDDLE, ABOVE])
